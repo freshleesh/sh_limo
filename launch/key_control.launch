@@ -1,8 +1,8 @@
 <launch>
     <node name="key_read" pkg="sh_limo"
-          type="key_read.py" output="screen" />
+          type="key_read.py" output="log" />
     <node name="key_twist" pkg="sh_limo"
-          type="key_twist.py" output="screen" />
+          type="key_twist.py" output="log" />
     <node name="cmd_vel_planner" pkg="sh_limo"
           type="cmd_vel_planner.py" output="screen" />
 </launch>

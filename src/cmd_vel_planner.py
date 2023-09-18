@@ -30,15 +30,26 @@ class cmd_vel_planner():
         elif self.now_steer > self.target_steer:
             self.now_steer -= self.steer_gap
 
+        if abs(self.now_steer) < 0.1 :
+            self.now_steer = 0
 
-if __name__ == 'main':
+        if abs(self.now_speed) < 0.1 :
+            self.now_speed = 0
+
+
+
+if __name__ == '__main__':
     cvp = cmd_vel_planner()
     rospy.init_node('cmd_vel_planner')
-    rospy.Subscriber('limo_vel',Twist,cvp.callback,queue_size=1)
+    rospy.Subscriber('/limo_vel',Twist,cvp.callback,queue_size=1)
     vel_pub = rospy.Publisher('cmd_vel',Twist,queue_size=1)
     rate=rospy.Rate(10)
-    cvp.chase()
-    t = Twist()
-    t.linear.x = cvp.now_speed
-    t.angular.z = cvp.now_steer
-    vel_pub.publish(t)
+    while not rospy.is_shutdown():
+        cvp.chase()
+        t = Twist()
+        t.linear.x = cvp.now_speed
+        t.angular.z = cvp.now_steer
+        print("speed",cvp.now_speed)
+        print("steer",cvp.now_steer)
+        vel_pub.publish(t)
+        rate.sleep()
